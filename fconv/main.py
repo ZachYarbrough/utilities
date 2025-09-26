@@ -51,6 +51,6 @@ if __name__ == "__main__":
 
     convert_from = sys.argv[2] if len(sys.argv) > 2 else '' 
     convert_to = sys.argv[3] if len(sys.argv) > 3 else ''
-    print(convert_from, convert_to, sys.argv)
+
     process_path(input_path, convert_from, convert_to)
 
