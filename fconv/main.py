@@ -3,10 +3,8 @@ import os
 import sys
 from pathlib import Path
 
+# Converts an image file to WebP and deletes the original on success.
 def convert_to_webp(input_path, quality=80):
-    """
-    Converts an image file to WebP and deletes the original on success.
-    """
     output_path = input_path.with_suffix('.webp')
     try:
         image = Image.open(input_path)
@@ -20,10 +18,9 @@ def convert_to_webp(input_path, quality=80):
     except Exception as e:
         print(f"Failed to convert {input_path}: {e}")
 
-def process_path(path, quality=85):
-    """
-    Process a single file or all images in a directory.
-    """
+
+# Process a single file or all images in a directory.
+def process_path(path, convert_from='', convert_to='webp', quality=85):
     p = Path(path)
     if not p.exists():
         print(f"Path not found: {path}")
@@ -32,18 +29,28 @@ def process_path(path, quality=85):
     if p.is_file():
         convert_to_webp(p, quality)
     elif p.is_dir():
-        # Loop through jpg/jpeg/png files
         for img_file in p.glob('*'):
-            if img_file.suffix.lower() in ['.jpg', '.jpeg', '.png']:
-                convert_to_webp(img_file, quality)
+            match convert_to:
+                case 'webp':
+                    if convert_from == '' or convert_from in ['jpg', 'jpeg', 'png']:
+                        if (convert_from == '' and img_file.suffix.lower() in ['.jpg', '.jpeg', '.png'] or (convert_from != '' and img_file.suffix.lower() == convert_from.lower())):
+                            convert_to_webp(img_file, quality)
+                    else:
+                        print(f"The file type {(convert_from + ' ') if convert_from else ''}can't currently be converted to {convert_to}")
+                case _:
+                    print(f"The file type {(convert_from + ' ') if convert_from else ''}can't currently be converted to {convert_to}")
     else:
         print(f"Path is not a file or directory: {path}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python main.py <file_or_directory>")
+        print("Usage: fconv <file_or_directory> [convert_from] [convert_to]")
         sys.exit(1)
 
-    input_path = sys.argv[1]
-    process_path(input_path, quality=85)
+    input_path = sys.argv[1] if len(sys.argv) > 1 else ''
+
+    convert_from = sys.argv[2] if len(sys.argv) > 2 else '' 
+    convert_to = sys.argv[3] if len(sys.argv) > 3 else ''
+    print(convert_from, convert_to, sys.argv)
+    process_path(input_path, convert_from, convert_to)
 
