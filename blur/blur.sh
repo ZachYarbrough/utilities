@@ -1,14 +1,14 @@
 #!/bin/bash
-# fconv - run file-converter Docker container on any file or folder
+# blur - run blur Docker container on any file or folder
 
 # Check if Docker image exists
-if ! docker image inspect fconv &> /dev/null; then
-    echo "Docker image 'fconv' not found. Please build it from your utilities repo and ensure it is cloned."
+if ! docker image inspect blur &> /dev/null; then
+    echo "Docker image 'blur' not found. Please build it from your utilities repo and ensure it is cloned."
     exit 1
 fi
 
 if [ -z "$1" ]; then
-  echo "Usage: fconv <file_or_directory> [convert_from] [convert_to]"
+  echo "Usage: blur <file_or_directory> [convert_from] [convert_to]"
   exit 1
 fi
 
@@ -24,4 +24,4 @@ HOST_DIR="$(dirname "$INPUT")"
 CONTAINER_PATH="/images/$(basename "$INPUT")"
 
 # Run the Docker container
-docker run --rm -v "$HOST_DIR":/images fconv "$CONTAINER_PATH" "$CONVERT_FROM" "$CONVERT_TO"
+docker run --rm -v "$HOST_DIR":/images blur "$CONTAINER_PATH" "$CONVERT_FROM" "$CONVERT_TO"

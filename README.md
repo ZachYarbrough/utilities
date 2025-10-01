@@ -5,7 +5,7 @@ This repository contains a set of small, reusable scripts and tools designed to 
 
 Current utilities include:
 
-- **fconv** – Dockerized image converter that converts JPG/PNG files to WebP.
+- **blur** – Dockerized image that converts JPG/PNG files to webp and creates a blurred image for lazy loading.
 
 Each utility lives in its own subfolder with instructions for usage and setup.  
 
